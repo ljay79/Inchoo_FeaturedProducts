@@ -200,7 +200,7 @@ class Inchoo_FeaturedProducts_Block_Adminhtml_Edit_Grid extends Mage_Adminhtml_B
 
             foreach ($products as $key => $value) {
                 if ((isset($featured_ids[$value])) && ($featured_ids[$value] == 0)) {
-                    
+
                 }else
                     $selected_products[$value] = '0';
             }
@@ -229,79 +229,62 @@ class Inchoo_FeaturedProducts_Block_Adminhtml_Edit_Grid extends Mage_Adminhtml_B
                 <<<EndHTML
 		<script type="text/javascript">
 		//<![CDATA[
-
     categoryForm = new varienForm('featured_edit_form');
 	categoryForm.submit= function (url) {
-    
-	this._submit();
-           
-            return true;
-        
-        
-    };
-    
-    var initCheckboxes = function() {
-        
-        var everycheckbox = $$("#inchoo_featured_products_table tbody input.checkbox");
-        
-        everycheckbox.each(function(element, index) {
-                element.onclick = function(e)
-                {
-                    var val = element.value;
-                    if(element.checked)
-                    {
-                        element.checked = false;
-                        checkBoxes.set(val, 0);
-                    }
-                    else
-                    {
-                        element.checked = "checked";
-                        checkBoxes.set(val, 1);
-                    }
-                }
-        });
-    
-    }
 
+	this._submit();
+        return true;
+    };
+
+    var initCheckboxes = function() {
+        var everycheckbox = $$("#inchoo_featured_products_table tbody input.checkbox");
+        everycheckbox.each(function(element, index) {
+            element.onclick = function(e)
+            {
+                var val = element.value;
+                if(element.checked)
+                {
+                    element.checked = false;
+                    checkBoxes.set(val, 0);
+                }
+                else
+                {
+                    element.checked = "checked";
+                    checkBoxes.set(val, 1);
+                }
+            }
+        });
+    }
 
     function categorySubmit(url) {
-        
     	var params = {};
-        var fields = $('featured_edit_form').getElementsBySelector('input', 'select');   
-        
+        var fields = $('featured_edit_form').getElementsBySelector('input', 'select');
         categoryForm.submit();
     }
-    
-    function FeaturedRowClick(grid, event)
-    {	
 
+    function FeaturedRowClick(grid, event)
+    {
         var trElement = Event.findElement(event, 'tr');
     	var isInput   = Event.element(event).tagName == 'INPUT';
-
     	var checkbox = Element.getElementsBySelector(trElement, 'input.checkbox').first();
-        
+
         if(!checkbox) return;
-	
+
         var val = checkbox.value;
 
-        if(checkbox.checked)
-        {
+        if(checkbox.checked) {
             checkbox.checked = false;
             checkBoxes.set(val, 0);
-        }
-        else
-        {
+        } else {
             checkbox.checked = "checked";
             checkBoxes.set(val, 1);
         }
-   
+
 		$("in_featured_products").value = checkBoxes.toQueryString();
-		console.log("Products", checkBoxes);
-	   	$gridName.reloadParams = {'featured_ids':checkBoxes.toQueryString()};    
+		// console.log("Products", checkBoxes);
+	   	$gridName.reloadParams = {'featured_ids':checkBoxes.toQueryString()};
     }
-    
 //]]>
-		
         </script>
 EndHTML;
 
@@ -309,32 +292,26 @@ EndHTML;
     }
 
     private function _appendHtml() {
-        $html = '<script type="text/javascript">	
+        $html = '<script type="text/javascript">
 		var checkBoxes = $H();
-		
+
 		var checkbox_all = $$("#inchoo_featured_products_table thead input.checkbox").first();
         	var everycheckbox = $$("#inchoo_featured_products_table tbody input.checkbox");
-		
+
 		checkbox_all.observe("click", function(event) {
-		
-		if(checkbox_all.checked)
-		{
-                	everycheckbox.each(function(element, index) {
-                        
-			checkBoxes.set(element.value, 1)
-                        
+    		if(checkbox_all.checked)
+    		{
+            	everycheckbox.each(function(element, index) {
+                    checkBoxes.set(element.value, 1)
                 });
-                    } else
-                        {
-                            everycheckbox.each(function(element, index) {
-                            checkBoxes.set(element.value, 0)
-			});
-                }
-    	$("in_featured_products").value = checkBoxes.toQueryString();
-		});	
-
-	initCheckboxes();
-
+            } else {
+                everycheckbox.each(function(element, index) {
+                    checkBoxes.set(element.value, 0)
+    			});
+            }
+        	$("in_featured_products").value = checkBoxes.toQueryString();
+		});
+        initCheckboxes();
         </script>';
 
         return $html;

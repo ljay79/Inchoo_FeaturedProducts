@@ -1,0 +1,90 @@
+<?php
+// manual configuration
+$showAsSlider = true;
+
+/* @var $featuredProducts Mage_Catalog_Model_Category */
+/* @var $_product Mage_Catalog_Model_Product */
+$featuredProducts = $this->getFeaturedProductCollectionByCategory();
+if (count($featuredProducts) == 0) return '';
+?>
+<h3 class="block-shopbybrand-featuredproduct-title"><?php echo $this->__('Featured Products'); ?></h3>
+<div id="category-featuredproduct"
+	class="block-content block-shopbybrand-featuredproduct<?php if ($showAsSlider) echo ' crsl-items'; ?>">
+	<ol class="product-grid<?php if ($showAsSlider) echo ' crsl-wrap'; ?>">
+        <?php foreach ($featuredProducts as $_product): ?>
+        <li class="product-item<?php if ($showAsSlider) echo ' crsl-item'; ?>">
+			<article class="product-inner">
+				<a href="<?php echo $this->getProductUrl($_product); ?>" class="product-image" title="<?php echo $_product->getName(); ?>">
+					<img
+						src="<?php echo $this->helper('catalog/image')->init($_product, 'small_image')->resize(300, 200); ?>"
+						width="300" height="200" alt="<?php echo $_product->getName(); ?>" />
+				</a>
+				<h4 class="product-name">
+					<a href="<?php echo $this->getProductUrl($_product); ?>" title="<?php echo $_product->getName(); ?>"><?php echo $_product->getName(); ?></a>
+				</h4>
+
+				<div class="product-info">
+					<?php echo $this->getPriceHtml($_product, true); ?>
+					<div class="shipping-box">
+						<i class="icon icon-delivery" aria-hidden="true"></i>
+						<?php echo $this->__('Free Delivery') ?>
+					</div>
+					<?php $brand = str_replace(" ", "-", $_product->getAttributeText('brand')); ?>
+
+					<div class="brand-box" style="background-image:url('/media/wysiwyg/brands/<?php echo $brand; ?>.png'); ?>')"></div>
+				</div>
+
+				<div class="product-actions"><span class="vcenter">
+				<?php if ($_product->isSaleable()): ?>
+					<a href="<?php echo $_product->getProductUrl();?>" title="<?php echo $this->__('Show Product') ?>" class="button button-primary">
+						<?php echo $this->__('Show Product') ?>
+					</a>
+				<?php else: ?>
+					<button type="button" class="button button-primary" disabled>
+						<?php echo $this->__('Out of stock') ?>
+					</button>
+				<?php endif; ?>
+					<ul class="add-to-links">
+					<?php if ($this->helper('wishlist')->isAllow()) : ?>
+						<li>
+							<a href="<?php echo $this->helper('wishlist')->getAddUrl($_product) ?>" class="link-wishlist"><?php echo $this->__('Add to Wishlist') ?></a>
+						</li>
+					<?php endif; ?>
+					</ul>
+				<span></div>
+
+                <?php echo $this->getReviewsSummaryHtml($_product, 'short', true)?>
+            </article>
+		</li>
+        <?php endforeach; ?>
+    </ol>
+</div>
+<?php if ($showAsSlider): ?>
+    <div id="category-featuredproduct-nav"
+    	class="block-shopbybrand-featuredproduct-nav crsl-nav">
+    	<a href="#" class="previous" rel="prev">
+    		<i class="icon icon-chevron-left" aria-hidden="true"></i>
+    		<span class="sr-only"><?php echo $this->__('Previous') ?></span>
+    	</a>
+    	<a href="#" class="next" rel="next">
+    		<i class="icon icon-chevron-right" aria-hidden="true"></i>
+    		<span class="sr-only"><?php echo $this->__('Next') ?></span>
+    	</a>
+    </div>
+
+    <script type="text/javascript">
+    + function($) { "use-strict"; $(function () {
+        /**
+         * featuredproduct carousel
+         * @return {void}
+         */
+        $('#category-featuredproduct').carousel({
+            overflow: false,
+            visible: 4,
+            itemMinWidth: 320,
+            itemMargin: 0,
+            navigation: 'category-featuredproduct-nav'
+        });
+    }); }(jQuery);
+    </script>
+<?php endif; //END: if($showAsSlider) ?>
